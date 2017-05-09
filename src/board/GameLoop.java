@@ -79,7 +79,7 @@ public class GameLoop
         if(canUndo && x == fromX && y == fromY && !hasChosenPiece)
         {
         	//wants to undo 
-        	System.out.println("wants to undo");
+        	System.out.println("wants to undo"+"fromX: "+fromX+" fromY: "+fromY);
         	Piece undoPiece = board.getPiece(undoFromX, undoFromY);
         	board.undoMove(fromX,fromY,undoFromX,undoFromY);
         	if(board.lastRemovedPiece != null)
@@ -97,10 +97,12 @@ public class GameLoop
         else
         {
         	this.resetTileBackgrounds();
+        	System.out.println("came here to mess things up"+" canUndo: "+canUndo+" ");
         	if(!hasChosenPiece && (board.getPiece(x, y) == null || !isPieceOnTeam(board.getPiece(x, y),this.turn)))
         		return;
         	else if(!hasChosenPiece)
         	{
+        		System.out.println("hasnt chosen piece");
         		fromX = x;
         		fromY = y;
         		hasChosenPiece = true;
@@ -140,6 +142,7 @@ public class GameLoop
         	}
         	else if(hasChosenPiece)
         	{
+        		System.out.println("hasChosenPiece is true");
         		boolean choseValidSpot = false;
         		for(int i = 0; i < currPossibleMoves.size(); i++)
         		{
@@ -168,9 +171,11 @@ public class GameLoop
         		hasChosenPiece = false;
         		if(!choseValidSpot)
         		{
+        			canUndo = false;
         			this.resetTileBackgrounds();
         			return;
         		}
+        		
         		
         	}
         	if(board.wKing.isInCheck() && turn == 1)
