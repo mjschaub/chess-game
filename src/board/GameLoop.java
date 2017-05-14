@@ -79,7 +79,7 @@ public class GameLoop
         if(canUndo && x == fromX && y == fromY && !hasChosenPiece)
         {
         	//wants to undo 
-        	System.out.println("wants to undo"+"fromX: "+fromX+" fromY: "+fromY);
+        	//System.out.println("wants to undo"+"fromX: "+fromX+" fromY: "+fromY);
         	Piece undoPiece = board.getPiece(undoFromX, undoFromY);
         	board.undoMove(fromX,fromY,undoFromX,undoFromY);
         	if(board.lastRemovedPiece != null)
@@ -97,12 +97,15 @@ public class GameLoop
         else
         {
         	this.resetTileBackgrounds();
-        	System.out.println("came here to mess things up"+" canUndo: "+canUndo+" ");
+        	//System.out.println("came here to mess things up"+" canUndo: "+canUndo+" ");
         	if(!hasChosenPiece && (board.getPiece(x, y) == null || !isPieceOnTeam(board.getPiece(x, y),this.turn)))
+        	{
+        		canUndo = false;
         		return;
+        	}
         	else if(!hasChosenPiece)
         	{
-        		System.out.println("hasnt chosen piece");
+        		//System.out.println("hasnt chosen piece");
         		fromX = x;
         		fromY = y;
         		hasChosenPiece = true;
@@ -142,7 +145,7 @@ public class GameLoop
         	}
         	else if(hasChosenPiece)
         	{
-        		System.out.println("hasChosenPiece is true");
+        		//System.out.println("hasChosenPiece is true");
         		boolean choseValidSpot = false;
         		for(int i = 0; i < currPossibleMoves.size(); i++)
         		{
@@ -151,7 +154,7 @@ public class GameLoop
         				choseValidSpot = true;
         				if(choseValidSpot)
         				{
-        					System.out.println("image icon: "+fromX+","+fromY+" and the piece "+board.getPiece(fromX,fromY));
+        					//System.out.println("image icon: "+fromX+","+fromY+" and the piece "+board.getPiece(fromX,fromY));
         					buttons[x][y].setIcon(new ImageIcon(getClass().getResource("image/"+board.getPiece(fromX, fromY).draw())));
         					buttons[fromX][fromY].setIcon(null);
         					board.makeMove(fromX, fromY, x, y);
@@ -337,13 +340,13 @@ public class GameLoop
 		}
 		else
 		{
-			System.out.println("checking if black move puts king in check");
+			//System.out.println("checking if black move puts king in check");
 			for(int i = 0; i < board.wPieces.size(); i++)
 			{
 				int tempX  = board.wPieces.get(i).getX();
 				int tempY  = board.wPieces.get(i).getY();
 				ArrayList<String> newMoves = board.showMoves(tempX, tempY);
-				System.out.println(newMoves);
+				//System.out.println(newMoves);
 				if(newMoves == null)
 					continue;
 				if(newMoves.contains(board.bKing.getTile()))
