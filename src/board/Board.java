@@ -76,7 +76,7 @@ public class Board
 		fakeLastRemovedPiece = null;
 		
 		//Comment the lines of code below this in the constructor for a normal game without custom pieces
-		
+		/*
 		boardLayout[3][7] = new Rider(0,3,7);
 		boardLayout[3][5] = new Pawship(0,3,5);
 		wPieces.add(boardLayout[3][7]);
@@ -85,7 +85,7 @@ public class Board
 		boardLayout[4][2] = new Pawship(1,4,2);
 		bPieces.add(boardLayout[4][0]);
 		bPieces.add(boardLayout[4][2]);
-		
+		*/
 	}
 	/**
 	 * Removes the piece at the x, y position from the board
@@ -330,7 +330,7 @@ public class Board
 	public void makeMove(int fromX, int fromY, int x, int y)
 	{
 		Piece currPiece = getPiece(fromX,fromY);
-		//System.out.println("making move: "+currPiece);
+		////System.out.println("making move: "+currPiece);
 		if(currPiece instanceof Pawn && ((Pawn) currPiece).isFirstMove())
 		{
 			((Pawn) currPiece).setSecondMove(true);
@@ -369,7 +369,7 @@ public class Board
 	public void makeFakeMove(int fromX, int fromY, int x, int y)
 	{
 		Piece currPiece = getPiece(fromX,fromY);
-		//System.out.println("making move: "+currPiece);
+		////System.out.println("making move: "+currPiece);
 		if(currPiece instanceof Pawn && ((Pawn) currPiece).isFirstMove())
 		{
 			((Pawn) currPiece).setSecondMove(true);
@@ -442,7 +442,7 @@ public class Board
 			
 				if(wMoves.contains(kingPos))
 				{
-					//System.out.println("king at "+kingPos+" is in check");
+					////System.out.println("king at "+kingPos+" is in check");
 					bKing.putInCheck(true);
 					didPutInCheck = true;
 				}
@@ -462,7 +462,7 @@ public class Board
 	public void undoMove(int oldX, int oldY, int x, int y)
 	{
 		Piece currPiece = getPiece(x,y);
-		System.out.println("last removed piece: "+lastRemovedPiece);
+		//System.out.println("last removed piece: "+lastRemovedPiece);
 		if(currPiece instanceof Pawn && ((Pawn) currPiece).isSecondMove())
 			((Pawn) currPiece).setFirstMove(true);
 		if(lastRemovedPiece == null)
@@ -496,7 +496,7 @@ public class Board
 	public void undoFakeMove(int oldX, int oldY, int x, int y)
 	{
 		Piece currPiece = getPiece(x,y);
-		System.out.println("last removed piece: "+lastRemovedPiece);
+		//System.out.println("last removed piece: "+lastRemovedPiece);
 		if(currPiece instanceof Pawn && ((Pawn) currPiece).isSecondMove())
 			((Pawn) currPiece).setFirstMove(true);
 		if(fakeLastRemovedPiece == null)

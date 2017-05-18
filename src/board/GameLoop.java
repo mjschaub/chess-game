@@ -79,7 +79,7 @@ public class GameLoop
         if(canUndo && x == fromX && y == fromY && !hasChosenPiece)
         {
         	//wants to undo 
-        	//System.out.println("wants to undo"+"fromX: "+fromX+" fromY: "+fromY);
+        	////System.out.println("wants to undo"+"fromX: "+fromX+" fromY: "+fromY);
         	Piece undoPiece = board.getPiece(undoFromX, undoFromY);
         	board.undoMove(fromX,fromY,undoFromX,undoFromY);
         	if(board.lastRemovedPiece != null)
@@ -97,7 +97,7 @@ public class GameLoop
         else
         {
         	this.resetTileBackgrounds();
-        	//System.out.println("came here to mess things up"+" canUndo: "+canUndo+" ");
+        	////System.out.println("came here to mess things up"+" canUndo: "+canUndo+" ");
         	if(!hasChosenPiece && (board.getPiece(x, y) == null || !isPieceOnTeam(board.getPiece(x, y),this.turn)))
         	{
         		canUndo = false;
@@ -105,7 +105,25 @@ public class GameLoop
         	}
         	else if(!hasChosenPiece)
         	{
-        		//System.out.println("hasnt chosen piece");
+        		
+        		if(isInStalemate())
+            	{
+            		JOptionPane.showMessageDialog(null, "A stalemate has occured, it's a tie!");
+            		Object[] options = {"Start a new game","Stop playing"};
+            		int choice = JOptionPane.showOptionDialog(createdBoard.getMyFrame(),
+            					"Would you like to play again?",
+            					"Game Over",
+            					JOptionPane.YES_NO_OPTION,
+            					JOptionPane.QUESTION_MESSAGE,
+            					null,
+            					options,
+            					options[1]);
+            		if(choice == 0)
+            			startGame(); //play another game
+            		else
+            			this.isRunning = false; //quit
+            		
+            	}
         		fromX = x;
         		fromY = y;
         		hasChosenPiece = true;
@@ -145,7 +163,7 @@ public class GameLoop
         	}
         	else if(hasChosenPiece)
         	{
-        		//System.out.println("hasChosenPiece is true");
+        		
         		boolean choseValidSpot = false;
         		for(int i = 0; i < currPossibleMoves.size(); i++)
         		{
@@ -154,7 +172,7 @@ public class GameLoop
         				choseValidSpot = true;
         				if(choseValidSpot)
         				{
-        					//System.out.println("image icon: "+fromX+","+fromY+" and the piece "+board.getPiece(fromX,fromY));
+        					////System.out.println("image icon: "+fromX+","+fromY+" and the piece "+board.getPiece(fromX,fromY));
         					buttons[x][y].setIcon(new ImageIcon(getClass().getResource("image/"+board.getPiece(fromX, fromY).draw())));
         					buttons[fromX][fromY].setIcon(null);
         					board.makeMove(fromX, fromY, x, y);
@@ -201,6 +219,7 @@ public class GameLoop
         			endGame(0);
         		}
         	}
+        	/*
         	else if(isInStalemate())
         	{
         		JOptionPane.showMessageDialog(null, "A stalemate has occured, it's a tie!");
@@ -218,14 +237,14 @@ public class GameLoop
         		else
         			this.isRunning = false; //quit
         		
-        	}
+        	}*/
         	
         	changeTurn();
         }
         	
     }
 	/**
-	 * checks if there is a player in checkmate
+	 * checks if there is a player in check mate
 	 * @return true or false
 	 */
 	private boolean hasCheckmateCondition() 
@@ -340,13 +359,13 @@ public class GameLoop
 		}
 		else
 		{
-			//System.out.println("checking if black move puts king in check");
+			////System.out.println("checking if black move puts king in check");
 			for(int i = 0; i < board.wPieces.size(); i++)
 			{
 				int tempX  = board.wPieces.get(i).getX();
 				int tempY  = board.wPieces.get(i).getY();
 				ArrayList<String> newMoves = board.showMoves(tempX, tempY);
-				//System.out.println(newMoves);
+				////System.out.println(newMoves);
 				if(newMoves == null)
 					continue;
 				if(newMoves.contains(board.bKing.getTile()))
@@ -462,9 +481,8 @@ public class GameLoop
 	{
 		
 		boolean hasAMove = false;
-		if (this.turn == 1)
+		if (this.turn == 0)
 		{
-			
 			for(int i = 0; i < board.wPieces.size(); i++)
 			{
 				int oldX = board.wPieces.get(i).getX();
@@ -475,18 +493,21 @@ public class GameLoop
 				
 				for(int j = 0; j < moves.size(); j++)
 				{
-					if(moves.get(j) == "")
-						continue;
-					if(doesPutKingInCheck(board.getMoveX(moves, j),board.getMoveY(moves, j),oldX,oldY))
+					if(moves.get(j) == "" || doesPutKingInCheck(board.getMoveX(moves, j),board.getMoveY(moves, j),oldX,oldY))
 					{
 						continue;
 					}
-					hasAMove = true;
+					else
+					{
+						//System.out.println("found a spot for team to move");
+						hasAMove = true;
+					}
 				}
 			}	
 		}
 		else
 		{	
+			//System.out.println("size of black pieces: "+board.bPieces.size());
 			for(int i = 0; i < board.bPieces.size(); i++)
 			{
 				int oldX = board.bPieces.get(i).getX();
@@ -497,13 +518,16 @@ public class GameLoop
 				
 				for(int j = 0; j < moves.size(); j++)
 				{
-					if(moves.get(j) == "")
-						continue;
-					if(doesPutKingInCheck(board.getMoveX(moves, j),board.getMoveY(moves, j),oldX,oldY))
+					
+					if(moves.get(j) == "" || doesPutKingInCheck(board.getMoveX(moves, j),board.getMoveY(moves, j),oldX,oldY))
 					{
 						continue;
 					}
-					hasAMove = true;
+					else
+					{
+						//System.out.println("found a spot for team to move");
+						hasAMove = true;
+					}
 				}
 			}
 		}
